@@ -1,118 +1,305 @@
 import tkinter as tk
+from PIL import Image, ImageTk
+import os
 
 
 class IDARADZ:
+
     def __init__(self, root):
+
         self.root = root
 
         self.root.title("IDARA DZ")
-        self.root.geometry("1100x700")
+
+        self.root.geometry("1400x850")
+
         self.root.configure(bg="#f5f5f5")
 
-        # الشريط الجانبي
+        self.root.minsize(1200, 750)
+
+        self.assets = "assets"
+
+        self.build_ui()
+
+    def load_icon(self, filename, size):
+
+        path = os.path.join(self.assets, filename)
+
+        image = Image.open(path)
+
+        image = image.resize(size)
+
+        return ImageTk.PhotoImage(image)
+
+    def build_ui(self):
+
+        # =========================
+        # SIDEBAR
+        # =========================
+
         self.sidebar = tk.Frame(
-            root,
-            bg="#111111",
-            width=220
+            self.root,
+            bg="#ffffff",
+            width=150
         )
-        self.sidebar.pack(side="right", fill="y")
 
-        # شعار البرنامج
-        self.logo = tk.Label(
+        self.sidebar.pack(
+            side="left",
+            fill="y"
+        )
+
+        self.sidebar.pack_propagate(False)
+
+        # HOME BUTTON
+
+        self.home_icon = self.load_icon(
+            "home.png",
+            (40, 40)
+        )
+
+        self.home_btn = tk.Button(
             self.sidebar,
-            text="IDARA DZ",
-            bg="#111111",
+            image=self.home_icon,
+            text="الرئيسية",
+            compound="top",
+            bg="black",
             fg="white",
-            font=("Arial", 24, "bold")
-        )
-        self.logo.pack(pady=40)
-
-        # زر الوثائق
-        self.docs_btn = tk.Button(
-            self.sidebar,
-            text="الوثائق",
-            bg="white",
-            fg="#111111",
-            font=("Arial", 14, "bold"),
+            activebackground="black",
+            activeforeground="white",
             relief="flat",
-            cursor="hand2"
+            font=("Arial", 12, "bold"),
+            cursor="hand2",
+            width=100,
+            height=80
         )
-        self.docs_btn.pack(fill="x", padx=20, pady=10, ipady=10)
 
-        # المنطقة الرئيسية
-        self.main_area = tk.Frame(
-            root,
+        self.home_btn.pack(
+            pady=(30, 0)
+        )
+
+        # BOTTOM ICONS
+
+        self.bottom_frame = tk.Frame(
+            self.sidebar,
+            bg="white"
+        )
+
+        self.bottom_frame.pack(
+            side="bottom",
+            pady=30
+        )
+
+        self.settings_icon = self.load_icon(
+            "settings.png",
+            (42, 42)
+        )
+
+        self.moon_icon = self.load_icon(
+            "moon.png",
+            (42, 42)
+        )
+
+        self.info_icon = self.load_icon(
+            "info.png",
+            (42, 42)
+        )
+
+        self.back_icon = self.load_icon(
+            "back.png",
+            (42, 42)
+        )
+
+        def create_side_icon(icon):
+
+            btn = tk.Button(
+                self.bottom_frame,
+                image=icon,
+                bg="white",
+                relief="flat",
+                cursor="hand2",
+                activebackground="white",
+                bd=0
+            )
+
+            btn.pack(
+                pady=8
+            )
+
+            return btn
+
+        self.settings_btn = create_side_icon(
+            self.settings_icon
+        )
+
+        self.moon_btn = create_side_icon(
+            self.moon_icon
+        )
+
+        self.info_btn = create_side_icon(
+            self.info_icon
+        )
+
+        # LINE
+
+        self.line = tk.Frame(
+            self.bottom_frame,
+            bg="black",
+            height=3,
+            width=70
+        )
+
+        self.line.pack(
+            pady=12
+        )
+
+        self.back_btn = create_side_icon(
+            self.back_icon
+        )
+
+        # =========================
+        # MAIN AREA
+        # =========================
+
+        self.main = tk.Frame(
+            self.root,
             bg="#f5f5f5"
         )
-        self.main_area.pack(side="left", expand=True, fill="both")
 
-        # العنوان
-        self.title = tk.Label(
-            self.main_area,
-            text="قسم الوثائق",
-            bg="#f5f5f5",
-            fg="#111111",
-            font=("Arial", 28, "bold"),
-            anchor="e"
+        self.main.pack(
+            side="left",
+            expand=True,
+            fill="both"
         )
-        self.title.pack(fill="x", padx=40, pady=(40, 10))
 
-        # الوصف
-        self.subtitle = tk.Label(
-            self.main_area,
-            text="إدارة الطلبات الخطية والنماذج",
-            bg="#f5f5f5",
-            fg="#555555",
-            font=("Arial", 13),
-            anchor="e"
+        # LOGO
+
+        self.logo_img = self.load_icon(
+            "logo.png",
+            (520, 170)
         )
-        self.subtitle.pack(fill="x", padx=40)
 
-        # بطاقة تجريبية
-        self.card = tk.Frame(
-            self.main_area,
+        self.logo_label = tk.Label(
+            self.main,
+            image=self.logo_img,
+            bg="#f5f5f5"
+        )
+
+        self.logo_label.pack(
+            pady=(70, 40)
+        )
+
+        # =========================
+        # CARDS
+        # =========================
+
+        self.cards_frame = tk.Frame(
+            self.main,
+            bg="#f5f5f5"
+        )
+
+        self.cards_frame.pack()
+
+        self.document_icon = self.load_icon(
+            "document.png",
+            (90, 90)
+        )
+
+        self.web_icon = self.load_icon(
+            "web.png",
+            (90, 90)
+        )
+
+        self.archive_icon = self.load_icon(
+            "archive.png",
+            (90, 90)
+        )
+
+        self.create_card(
+            self.cards_frame,
+            self.document_icon,
+            "وثائق",
+            "إنشاء وتعديل مختلف الوثائق\nالإدارية بسهولة",
+            0
+        )
+
+        self.create_card(
+            self.cards_frame,
+            self.web_icon,
+            "خدمات الكترونية",
+            "الوصول إلى الخدمات الإلكترونية\nوالمنصات الرسمية",
+            1
+        )
+
+        self.create_card(
+            self.cards_frame,
+            self.archive_icon,
+            "ارشيف",
+            "إدارة وأرشفة الملفات والوثائق\nوالوصول إليها بسهولة",
+            2
+        )
+
+    def create_card(
+        self,
+        parent,
+        icon,
+        title,
+        text,
+        column
+    ):
+
+        card = tk.Frame(
+            parent,
             bg="white",
-            bd=1,
-            relief="solid"
-        )
-        self.card.pack(
-            anchor="ne",
-            padx=40,
-            pady=40,
-            ipadx=40,
-            ipady=30
+            width=350,
+            height=410,
+            highlightbackground="#dddddd",
+            highlightthickness=1
         )
 
-        self.card_title = tk.Label(
-            self.card,
-            text="طلب خطي",
+        card.grid(
+            row=0,
+            column=column,
+            padx=25
+        )
+
+        card.grid_propagate(False)
+
+        icon_label = tk.Label(
+            card,
+            image=icon,
+            bg="white"
+        )
+
+        icon_label.pack(
+            pady=(55, 25)
+        )
+
+        title_label = tk.Label(
+            card,
+            text=title,
             bg="white",
-            fg="#111111",
-            font=("Arial", 18, "bold")
+            fg="black",
+            font=("Arial", 22, "bold")
         )
-        self.card_title.pack(pady=(0, 10))
 
-        self.card_text = tk.Label(
-            self.card,
-            text="بطاقة تجريبية للنظام",
+        title_label.pack()
+
+        text_label = tk.Label(
+            card,
+            text=text,
             bg="white",
             fg="#666666",
-            font=("Arial", 11)
+            font=("Arial", 14),
+            justify="center"
         )
-        self.card_text.pack()
 
-        self.preview_btn = tk.Button(
-            self.card,
-            text="معاينة",
-            bg="#111111",
-            fg="white",
-            font=("Arial", 11, "bold"),
-            relief="flat",
-            cursor="hand2"
+        text_label.pack(
+            pady=18
         )
-        self.preview_btn.pack(fill="x", pady=(20, 0), ipady=8)
 
 
 root = tk.Tk()
+
 app = IDARADZ(root)
+
 root.mainloop()
